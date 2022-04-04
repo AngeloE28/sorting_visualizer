@@ -3,9 +3,11 @@
     display: flexbox;
     flex-wrap: wrap;    
     flex-direction: column;
+    margin-top: 40px;        
 }
 
 .array-container button {
+    margin-top: 20px;
     margin-left: 5px;
     margin-right: 5px;
 }
@@ -15,5 +17,6 @@
     background-color: orange;
     display: inline-block;    
     margin-left: 1px;
-    margin-right: 1px;
+    margin-right: 1px;    
+    transition: 0.05s ease;    
 }
