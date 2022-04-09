@@ -16,7 +16,7 @@ function mergeSortHelper(
     anims) {
         if(startIdx === endIdx) 
             return;
-        
+                                
         const middleIdx = Math.floor((startIdx + endIdx) / 2);
         mergeSortHelper(auxiliaryArr, startIdx, middleIdx, mainArr, anims);
         mergeSortHelper(auxiliaryArr, middleIdx + 1, endIdx, mainArr, anims);
@@ -51,7 +51,7 @@ function merge(
         }            
     }
     while(i <= middleIdx) {
-        // Repeat first while loop, compare i to i and overwrite
+        // Repeat first while loop, compare i to middleIdx and overwrite
         // k with i
         anims.push([i, i]);            
         anims.push([i, i]);            
@@ -59,7 +59,7 @@ function merge(
         mainArr[k++] = auxiliaryArr[i++];
     }
     while(j <= endIdx) {
-        // Repeat second while loop, instead of value i, its value j
+        // Repeat second while loop, for value j and the endIdx
         anims.push([j, j]);            
         anims.push([j, j]);     
         anims.push([k, auxiliaryArr[j]]);            
@@ -84,11 +84,12 @@ function bubble(mainArr, anims) {
     for(i = 0; i < length - 1; i++) {
         swapped = false;
         for(j = 0; j < length - i - 1; j++) {
-            // Values being compared, push them to change and rever their color
+            // Values being compared, push them twice to change the color once
+            // Then revert their color
             anims.push([j, j + 1]);
             anims.push([j, j + 1]);
             if(mainArr[j] > mainArr[j + 1]) {            
-                // Values that are swapped                   
+                // Values that are swapped             
                 anims.push([j, mainArr[j + 1]]);
                 anims.push([j + 1, mainArr[j]]);
                 swap(mainArr, j, j+1); 
@@ -103,6 +104,93 @@ function bubble(mainArr, anims) {
             break;
         }
     }
+}
+
+export function heapSort(arr) {
+    const anims = [];
+    if(arr.length <= 1)
+        return arr;
+
+    const auxArr = arr.slice();
+    heap(auxArr, anims);
+    return anims;     
+}
+
+function heap(mainArr, anims) {
+    const length = mainArr.length;    
+
+    // Find the maximum number and move it to the root node
+    // Which is 0 in the array
+    for (let i = Math.floor(length/2) - 1; i >= 0; i--) {        
+        // Build the max heap
+        maxHeapify(mainArr, length, i, anims);
+    }
+
+    // Move the maximum number to the last largest number - 1 index in the array
+    // or the end of the array (array length - 1) if its the largest number
+    for(let i = length - 1; i > 0; i--) {   
+        // Values being compared, push them twice to change the color once
+        // Then revert their color
+        // The root node and an element in the heap
+        anims.push([0, i]);
+        anims.push([0, i]);
+
+        // Values for animation
+        // Swapping the root node and an element in the heap
+        anims.push([0, mainArr[i]]);
+        anims.push([i, mainArr[0]]);
+        swap(mainArr, 0, i);               
+        
+        // Call the max heapify on the reduced heap
+        maxHeapify(mainArr, i , 0, anims);
+    }    
+}
+
+function maxHeapify(mainArr, length, idx, anims) {
+    let largest = idx;
+    let left = 2 * idx + 1;
+    let right = 2 * idx + 2;     
+       
+    // Check if the left child is larger than the root node
+    if(left < length && mainArr[left] > mainArr[largest]) {                        
+        largest = left;
+    }    
+    
+    // Check if the right child is larger than the root node
+    if(right < length && mainArr[right] > mainArr[largest]) {                
+        largest = right;        
+    }
+    
+    // Check if the largest child is not the root node
+    if (largest !== idx) {
+        // Values being compared for animations
+        // The parent and the largest child
+        anims.push([idx, largest]);
+        anims.push([idx, largest]);
+
+        // Values being compared for animations
+        // Swapping the parent with the largest child
+        anims.push([idx, mainArr[largest]]);
+        anims.push([largest, mainArr[idx]]);
+        swap(mainArr, idx, largest);
+        
+        // Recursively heapify the affected sub tree
+        maxHeapify(mainArr, length, largest, anims);
+    }
+}
+
+export function quickSort(arr) {
+    const anims = [];
+    if(arr.length <= 1)
+        return arr;
+
+    const auxArr = arr.slice();
+    quick(auxArr, anims);
+    return anims;     
+}
+
+function quick(mainArr, anims) {
+
 }
 
 function swap(mainArr, item1, item2) {

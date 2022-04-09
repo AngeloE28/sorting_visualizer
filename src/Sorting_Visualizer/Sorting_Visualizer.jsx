@@ -2,7 +2,7 @@ import React from "react";
 import './Sorting_Visualizer.css';
 import * as Sorting_Algorithms from '../Sorting_Algorithm/Sorting_Algorithm';
 
-const ANIM_SPEED_MS = 5;
+const ANIM_SPEED_MS = 20;
 const NUMBER_OF_ARRAY_BARS = 100;
 
 export class Sorting_Visualizer extends React.Component {
@@ -39,7 +39,7 @@ export class Sorting_Visualizer extends React.Component {
                 arr.push(randIntFromInterVals(-1000, 1000));
             }
             const jsSortedArr = arr.slice().sort((a, b) => a - b);
-            const mergeSortArr = Sorting_Algorithms.bubbleSort(arr.slice());
+            const mergeSortArr = Sorting_Algorithms.heapSort(arr.slice());
             console.log(arraysEqual(jsSortedArr, mergeSortArr));
         }
     }
@@ -51,11 +51,11 @@ export class Sorting_Visualizer extends React.Component {
         barTwoStyle.backgroundColor = color;                
     }
 
-    finishedColorSort(arrBars){
+    finishedColorSort(arrBars, speedAdjuster){
         for(let j = 0; j < arrBars.length; j++) {
             setTimeout(() => {
-                arrBars[j].style.backgroundColor = 'green';                            
-            }, j * ANIM_SPEED_MS)
+                arrBars[j].style.backgroundColor = 'lightgreen';                            
+            }, j * ANIM_SPEED_MS * speedAdjuster)
         }     
     }
 
@@ -91,7 +91,7 @@ export class Sorting_Visualizer extends React.Component {
                 }                
                 this.val++;
                 if(this.val === anims.length) {
-                    this.finishedColorSort(arrBars);
+                    this.finishedColorSort(arrBars, 1);
                     this.revertAfterFinishedColorSort(arrBars);
                 }
             }, i * ANIM_SPEED_MS)
@@ -103,19 +103,58 @@ export class Sorting_Visualizer extends React.Component {
     }
 
     heapSort() {
-
+        const anims = Sorting_Algorithms.heapSort(this.state.array);                         
+        this.val = 0;        
+        let idxToChangeColor = 0;
+        const maxAnimArrIter = 4; // Eighth value is the last value of the animation   
+        for(let i = 0; i < anims.length; i++) {                  
+            // Loop back to restart the animations
+            if(idxToChangeColor >= maxAnimArrIter)
+                idxToChangeColor = 0;
+                    
+            // Last two items is the height
+            const isColorChange = i % maxAnimArrIter === idxToChangeColor &&
+                                                        idxToChangeColor < maxAnimArrIter - 2;
+            idxToChangeColor++;
+            const arrBars = document.getElementsByClassName('array-bar');            
+            setTimeout(() => {                
+                if(isColorChange) {                                        
+                    this.val++;                                             
+                    const color = i % maxAnimArrIter === 0 ? 'red' : 'orange';                
+                    const [barOneIdx, barTwoIdx] = anims[i];                    
+                    this.colorSort(color, arrBars, barOneIdx, barTwoIdx);       
+                } else {                    
+                    this.val++;                   
+                    const[barIdx, newHeight] = anims[i];                                        
+                    this.heightAnimSort(arrBars, barIdx, newHeight);
+                }   
+                if(this.val === anims.length || (this.val + 2) === anims.length) {
+                    this.finishedColorSort(arrBars, 0.25);
+                    this.revertAfterFinishedColorSort(arrBars);
+                }                                
+            }, i * ANIM_SPEED_MS)            
+        }
     }
 
     bubbleSort() {
         const anims = Sorting_Algorithms.bubbleSort(this.state.array);                         
         this.val = 0;        
-        for(let i = 0; i < anims.length; i++) {            
-            const isColorChange = (i % 4 === 0) || (i % 4 === 1);
+        let idxToChangeColor = 0;
+        const maxAnimArrIter = 4; // Fourth value is the last value of the animation   
+        for(let i = 0; i < anims.length; i++) {
+            // Loop back to restart the animations
+            if(idxToChangeColor >= maxAnimArrIter)
+                idxToChangeColor = 0;          
+                
+            // Last two items is the height  
+            const isColorChange =  i % maxAnimArrIter === idxToChangeColor &&
+                                                        idxToChangeColor < maxAnimArrIter - 2;
+            idxToChangeColor++;             
             const arrBars = document.getElementsByClassName('array-bar');            
             setTimeout(() => {                
                 if(isColorChange) {                                        
                     this.val++;                                             
-                    const color = i % 4 === 0 ? 'red' : 'orange';                
+                    const color = i % maxAnimArrIter === 0 ? 'red' : 'orange';                
                     const [barOneIdx, barTwoIdx] = anims[i];
                     this.colorSort(color, arrBars, barOneIdx, barTwoIdx);       
                 } else {                    
@@ -127,7 +166,7 @@ export class Sorting_Visualizer extends React.Component {
                     this.heightAnimSort(arrBars, barIdx, newHeight);         
                 }   
                 if(this.val === anims.length || (this.val + 2) === anims.length) {
-                    this.finishedColorSort(arrBars);
+                    this.finishedColorSort(arrBars, 1);
                     this.revertAfterFinishedColorSort(arrBars);
                 }                                
             }, i * ANIM_SPEED_MS)
