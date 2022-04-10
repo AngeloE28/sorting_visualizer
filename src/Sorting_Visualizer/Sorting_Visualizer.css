@@ -1,9 +1,53 @@
+.title {
+    background-color: rgb(52, 82, 116);  
+    text-align: center;   
+    color: white;    
+}
+
 .array-container {
-    position: relative;
-    display: flexbox;
+    background-color: white;
+    position: relative;    
+    display: flex;
     flex-wrap: wrap;    
-    flex-direction: column;
-    margin-top: 40px;        
+    flex-direction: row;
+    margin-top: 40px;            
+}
+
+.userInputs {
+    background-color: rgb(64, 108, 145);
+}
+
+.barContainer {
+    align-items:flex-end;
+    display: flex;
+    flex-wrap: wrap;    
+    flex-direction: row;    
+    position: relative;
+    height: 700px;        
+}
+
+.array-bar {    
+    background-color: orange;
+    display: inline-block;
+    margin-left: 1px;
+    margin-right: 1px;                
+    transition: 0.05s ease;        
+}
+
+.buttonContainer {    
+    display: inline-block;
+    position: relative;
+    width: 260px;
+}
+
+
+.buttonContainer button {
+    width: 100px;
+    height: 20px;
+}
+
+.buttonContainer .newArrBtn {
+    width: 140px;    
 }
 
 .array-container button {
@@ -12,11 +56,45 @@
     margin-right: 5px;
 }
 
-.array-bar {
-    width: 4px;
-    background-color: orange;
-    display: inline-block;    
-    margin-left: 1px;
-    margin-right: 1px;    
-    transition: 0.05s ease;    
+.slideContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;    
+    color: white;
+}
+
+.slider {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 8px;
+    width: 250px;
+    height: 15px;
+    background: rgb(25, 53, 112);
+    outline: none;
+    opacity: 0.7;
+    -webkit-transition: 0.2s;
+    transition: opacity 0.2s;
+}
+
+.slider:hover {
+    opacity: 1;
+}
+
+.slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background: orange;
+    cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    background: orange;
+    cursor: pointer;
 }

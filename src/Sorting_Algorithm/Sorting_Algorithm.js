@@ -128,7 +128,7 @@ function heap(mainArr, anims) {
 
     // Move the maximum number to the last largest number - 1 index in the array
     // or the end of the array (array length - 1) if its the largest number
-    for(let i = length - 1; i > 0; i--) {   
+    for(let i = length - 1; i > 0; i--) {
         // Values being compared, push them twice to change the color once
         // Then revert their color
         // The root node and an element in the heap
@@ -185,12 +185,65 @@ export function quickSort(arr) {
         return arr;
 
     const auxArr = arr.slice();
-    quick(auxArr, anims);
-    return anims;     
+    quick(auxArr, anims);   
+    return anims;
 }
 
 function quick(mainArr, anims) {
+    const low = 0;
+    const high = mainArr.length - 1;
+    quickSortHelper(mainArr, low, high, anims);
+}
 
+function quickSortHelper(mainArr, low, high, anims) {
+    
+    if(low > high)
+        return;
+    
+    // Get the partition index
+    let partIdx = partition(mainArr, low, high, anims);
+
+    // Sort elements before and  after partition
+    quickSortHelper(mainArr, low, partIdx - 1, anims);
+    quickSortHelper(mainArr, partIdx + 1, high, anims);    
+}
+
+function partition(mainArr, low, high, anims) {    
+        
+    let pivot = mainArr[high];
+
+    // Index of smaller elements
+    // Inidcates the right position of pivot found so far
+    let idx = (low - 1);
+
+    for(let j = low; j <= high - 1; j++) {
+        
+        // Current element is smaller than pivot
+        if(mainArr[j] < pivot){
+            // Values being compared for animation
+            // Index of smaller element and current element
+            anims.push([idx, j]);
+            anims.push([idx, j]);
+
+            // Values being compared for animation
+            // Index of smaller element and current element being swapped
+            anims.push([idx, mainArr[j]]);
+            anims.push([j, mainArr[idx]]);
+            idx++;
+            swap(mainArr, idx, j);
+        }
+    }
+    // Values being compared for animation
+    // Index of smaller element and the ending index
+    anims.push([idx + 1, high]);
+    anims.push([idx + 1, high]);    
+
+    // Values being compared for animation
+    // Index of smaller element and the ending index swapped
+    anims.push([idx + 1, mainArr[high]]);
+    anims.push([high, mainArr[idx + 1]]);
+    swap(mainArr, idx + 1, high);
+    return (idx + 1);
 }
 
 function swap(mainArr, item1, item2) {
