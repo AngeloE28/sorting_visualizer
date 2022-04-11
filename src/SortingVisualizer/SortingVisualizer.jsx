@@ -1,8 +1,8 @@
 import React from "react";
-import './Sorting_Visualizer.css';
-import * as Sorting_Algorithms from '../Sorting_Algorithm/Sorting_Algorithm';
+import './SortingVisualizer.css';
+import * as Sorting_Algorithms from '../SortingAlgorithm/SortingAlgorithm';
 
-export class Sorting_Visualizer extends React.Component {
+export class SortingVisualizer extends React.Component {
     constructor(props) {
         super(props);
         this.val = 0;
@@ -294,14 +294,14 @@ function randIntFromInterVals(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-function arraysEqual(arr1, arr2) {    
-    if(arr1.length !== arr2.length)
-        return false;
+// function arraysEqual(arr1, arr2) {    
+//     if(arr1.length !== arr2.length)
+//         return false;
        
-    for(let i = 0; i < arr1.length; i++) {
-        if(arr1[i] !== arr2[i])
-            return false;
-    }
+//     for(let i = 0; i < arr1.length; i++) {
+//         if(arr1[i] !== arr2[i])
+//             return false;
+//     }
 
-    return true;
-}
+//     return true;
+// }
