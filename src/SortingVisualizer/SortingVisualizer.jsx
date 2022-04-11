@@ -14,8 +14,7 @@ export class SortingVisualizer extends React.Component {
     }
 
     componentDidMount() {
-        this.resetArray();
-        this.setArrayBarCount();
+        this.resetArray();        
     }
 
     resetArray() {
@@ -23,13 +22,16 @@ export class SortingVisualizer extends React.Component {
         for (let i = 0; i < this.state.numberOfArrayBars; i++){
             array.push(randIntFromInterVals(5, 700));                        
         }        
-        this.setState({array});
+        this.setState({array: array});
 
         const arrBars = document.getElementsByClassName('array-bar');           
         for(let i = 0; i < arrBars.length; i++) {            
             arrBars[i].style.backgroundColor = 'orange';
             arrBars[i].style.width = `${600/this.state.numberOfArrayBars}px`;
         }
+
+        // if(this.state.array.length !== this.state.numberOfArrayBars)
+        //     this.resetArray();
     }
 
     setArrayBarCount() {  
@@ -37,7 +39,8 @@ export class SortingVisualizer extends React.Component {
         
         var currentVal = input.value;
         this.setState({numberOfArrayBars: currentVal});        
-        this.resetArray();
+
+        this.resetArray();                
     }
 
     setAnimSpeed() {
@@ -242,7 +245,7 @@ export class SortingVisualizer extends React.Component {
                                 min="10"
                                 max="200" 
                                 defaultValue="100"
-                                step="1"
+                                step="2"
                                 className="slider"
                                 id="arrayRange"
                                 onInput={() => this.setArrayBarCount()}
