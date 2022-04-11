@@ -227,9 +227,9 @@ function partition(mainArr, low, high, anims) {
 
             // Values being compared for animation
             // Index of smaller element and current element being swapped
+            idx++;
             anims.push([idx, mainArr[j]]);
             anims.push([j, mainArr[idx]]);
-            idx++;
             swap(mainArr, idx, j);
         }
     }

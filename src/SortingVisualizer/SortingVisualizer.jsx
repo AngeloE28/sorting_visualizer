@@ -139,13 +139,13 @@ export class SortingVisualizer extends React.Component {
                 if(isColorChange) {                                        
                     this.val++;                                             
                     const color = i % maxAnimArrIter === 0 ? 'red' : 'orange';                
-                    const [barOneIdx, barTwoIdx] = anims[i];
+                    const [barOneIdx, barTwoIdx] = anims[i];                    
                     if(barOneIdx === -1)
-                        return;    
+                        return;                        
                     this.colorSort(color, arrBars, barOneIdx, barTwoIdx);       
                 } else {                    
                     this.val++;                   
-                    const[barIdx, newHeight] = anims[i];                                        
+                    const[barIdx, newHeight] = anims[i];                                                            
                     this.heightAnimSort(arrBars, barIdx, newHeight);
                 }   
                 if(this.val === anims.length || (this.val + 2) === anims.length) {
