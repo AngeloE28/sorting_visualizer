@@ -20,14 +20,14 @@ export class SortingVisualizer extends React.Component {
     resetArray() {
         const array = [];
         for (let i = 0; i < this.state.numberOfArrayBars; i++){
-            array.push(randIntFromInterVals(5, 700));                        
+            array.push(randIntFromInterVals(5, 500));                        
         }        
         this.setState({array: array});
 
         const arrBars = document.getElementsByClassName('array-bar');           
         for(let i = 0; i < arrBars.length; i++) {            
             arrBars[i].style.backgroundColor = 'orange';
-            arrBars[i].style.width = `${600/this.state.numberOfArrayBars}px`;
+            arrBars[i].style.width = `${1000/this.state.numberOfArrayBars}px`;
         }
 
         // if(this.state.array.length !== this.state.numberOfArrayBars)
@@ -243,7 +243,7 @@ export class SortingVisualizer extends React.Component {
                             <input 
                                 type="range" 
                                 min="10"
-                                max="200" 
+                                max="300" 
                                 defaultValue="100"
                                 step="2"
                                 className="slider"
