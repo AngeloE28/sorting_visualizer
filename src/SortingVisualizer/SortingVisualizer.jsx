@@ -357,7 +357,7 @@ export class SortingVisualizer extends React.Component {
                             style={{
                                     height: `${val}px`,
                                     // 0.35 to control the width with regards to  the window width
-                                    width: `${0.5*window.innerWidth/this.state.numberOfArrayBars}px`
+                                    width: `${0.4*window.innerWidth/this.state.numberOfArrayBars}px`
                                     }}
                         ></div>
                         </div>
