@@ -246,6 +246,76 @@ function partition(mainArr, low, high, anims) {
     return (idx + 1);
 }
 
+export function insertionSort(arr) {
+    const anims = [];
+    if(arr.length <= 1)
+        return arr;
+
+    const auxArr = arr.slice();
+    insertion(auxArr, anims);   
+    return anims;
+}
+
+function insertion(mainArr, anims) {    
+    let arrLength = mainArr.length;
+    for(let i = 0; i < arrLength; i++){        
+        let key = mainArr[i];        
+        let jdx = i - 1;
+        
+        while (jdx >= 0 && mainArr[jdx] > key) {
+            anims.push([jdx+1, jdx]);
+            anims.push([jdx+1, jdx]);
+
+            anims.push([jdx+1, mainArr[jdx]]);
+            anims.push([jdx, mainArr[jdx+1]]);
+            swap(mainArr, jdx+1, jdx);
+            jdx--;
+        }
+        mainArr[jdx + 1] = key;
+    }    
+}
+
+export function selectionSort(arr) {
+    const anims = [];
+    if(arr.length <= 1)
+        return arr;
+
+    const auxArr = arr.slice();
+    selection(auxArr, anims);   
+    return anims;
+}
+
+function selection(mainArr, anims) {
+    let minIdx;
+    let arrLength = mainArr.length;
+    for(let i = 0; i < arrLength; i++) {        
+        anims.push([i, i]);
+        anims.push([i, i]);
+        
+        anims.push([i, mainArr[minIdx]]);
+        minIdx = i;
+        anims.push([i, mainArr[minIdx]]);
+        for(let j = i; j < arrLength; j++) {
+            anims.push([minIdx, j]);
+            anims.push([minIdx, j]);
+            if(mainArr[j] < mainArr[minIdx]){
+                anims.push([j, mainArr[minIdx]]);                
+                minIdx = j;            
+                anims.push([j, mainArr[minIdx]]);
+            } else {    
+                anims.push([-1, -1]);
+                anims.push([-1, -1]);
+            }
+        }           
+        anims.push([minIdx, i]);
+        anims.push([minIdx, i]);
+
+        anims.push([minIdx, mainArr[i]]);
+        anims.push([i, mainArr[minIdx]]);
+        swap(mainArr, minIdx, i);
+    }
+}
+
 function swap(mainArr, item1, item2) {
     let temp = mainArr[item1];
     mainArr[item1] = mainArr[item2];

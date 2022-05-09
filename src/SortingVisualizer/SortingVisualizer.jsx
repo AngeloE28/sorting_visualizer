@@ -26,10 +26,8 @@ export class SortingVisualizer extends React.Component {
 
         const arrBars = document.getElementsByClassName('array-bar');           
         for(let i = 0; i < arrBars.length; i++) {            
-            arrBars[i].style.backgroundColor = 'orange';
-            arrBars[i].style.width = `${1000/this.state.numberOfArrayBars}px`;
-        }
-
+            arrBars[i].style.backgroundColor = 'orange';            
+        }        
         // if(this.state.array.length !== this.state.numberOfArrayBars)
         //     this.resetArray();
     }
@@ -53,18 +51,18 @@ export class SortingVisualizer extends React.Component {
     }
 
     // Test if the sorts are working properly
-    // testSort() {
-    //     for(let i = 0; i<100; i++) {
-    //         const arr = [];
-    //         const length = randIntFromInterVals(1, 1000);
-    //         for(let i = 0; i < length; i++) {
-    //             arr.push(randIntFromInterVals(-1000, 1000));
-    //         }
-    //         const jsSortedArr = arr.slice().sort((a, b) => a - b);
-    //         const mergeSortArr = Sorting_Algorithms.quickSort(arr.slice());
-    //         console.log(arraysEqual(jsSortedArr, mergeSortArr));
-    //     }
-    // }
+    testSort() {
+        for(let i = 0; i<100; i++) {
+            const arr = [];
+            const length = randIntFromInterVals(1, 1000);
+            for(let i = 0; i < length; i++) {
+                arr.push(randIntFromInterVals(-1000, 1000));
+            }
+            const jsSortedArr = arr.slice().sort((a, b) => a - b);
+            const mergeSortArr = Sorting_Algorithms.insertionSort(arr.slice());
+            console.log(arraysEqual(jsSortedArr, mergeSortArr));
+        }
+    }
 
     colorSort(color, arrBars, barOneIdx, barTwoIdx) {
         const barOneStyle = arrBars[barOneIdx].style;
@@ -227,6 +225,79 @@ export class SortingVisualizer extends React.Component {
         }
     }
 
+    insertionSort() {
+        const anims = Sorting_Algorithms.insertionSort(this.state.array);                         
+        this.val = 0;        
+        let idxToChangeColor = 0;
+        const maxAnimArrIter = 4; // Fourth value is the last value of the animation   
+        for(let i = 0; i < anims.length; i++) {
+            // Loop back to restart the animations
+            if(idxToChangeColor >= maxAnimArrIter)
+                idxToChangeColor = 0;          
+                
+            // Last two items is the height  
+            const isColorChange =  i % maxAnimArrIter === idxToChangeColor &&
+                                                        idxToChangeColor < maxAnimArrIter - 2;
+            idxToChangeColor++;             
+            const arrBars = document.getElementsByClassName('array-bar');            
+            setTimeout(() => {                
+                if(isColorChange) {                                        
+                    this.val++;                                             
+                    const color = i % maxAnimArrIter === 0 ? 'red' : 'orange';                
+                    const [barOneIdx, barTwoIdx] = anims[i];
+                    this.colorSort(color, arrBars, barOneIdx, barTwoIdx);       
+                } else {                    
+                    this.val++;                   
+                    const[barIdx, newHeight] = anims[i];                    
+                    if(barIdx < 0) {     
+                        return;
+                    }
+                    this.heightAnimSort(arrBars, barIdx, newHeight);         
+                }   
+                if(this.val === anims.length || (this.val + 2) === anims.length) {
+                    this.finishedColorSort(arrBars, 1);
+                    this.revertAfterFinishedColorSort(arrBars);
+                }                                
+            }, i * this.state.animSpeedMS * (this.state.numberOfArrayBars/100))
+        }
+    }
+
+    selectionSort() {
+        const anims = Sorting_Algorithms.selectionSort(this.state.array);                         
+        this.val = 0;        
+        let idxToChangeColor = 0;
+        const maxAnimArrIter = 4; // Fourth value is the last value of the animation   
+        for(let i = 0; i < anims.length; i++) {
+            // Loop back to restart the animations
+            if(idxToChangeColor >= maxAnimArrIter)
+                idxToChangeColor = 0;          
+                
+            // Last two items is the height  
+            const isColorChange =  i % maxAnimArrIter === idxToChangeColor &&
+                                                        idxToChangeColor < maxAnimArrIter - 2;
+            idxToChangeColor++;             
+            const arrBars = document.getElementsByClassName('array-bar');            
+            setTimeout(() => {                
+                if(isColorChange) {                                        
+                    this.val++;                                             
+                    const color = i % maxAnimArrIter === 0 ? 'red' : 'orange';                
+                    const [barOneIdx, barTwoIdx] = anims[i];
+                    this.colorSort(color, arrBars, barOneIdx, barTwoIdx);       
+                } else {                    
+                    this.val++;                   
+                    const[barIdx, newHeight] = anims[i];                    
+                    if(barIdx === -1) {     
+                        return;
+                    }
+                    this.heightAnimSort(arrBars, barIdx, newHeight);         
+                }   
+                if(this.val === anims.length || (this.val + 2) === anims.length) {
+                    this.finishedColorSort(arrBars, 1);
+                    this.revertAfterFinishedColorSort(arrBars);
+                }                                
+            }, i * this.state.animSpeedMS * (this.state.numberOfArrayBars/100))
+        }
+    }
 
     render() {
         const {array} = this.state;
@@ -243,7 +314,7 @@ export class SortingVisualizer extends React.Component {
                             <input 
                                 type="range" 
                                 min="10"
-                                max="300" 
+                                max="200" 
                                 defaultValue="100"
                                 step="2"
                                 className="slider"
@@ -272,7 +343,10 @@ export class SortingVisualizer extends React.Component {
                             <button onClick={() => this.mergeSort()}>Merge Sort</button>
                             <button onClick={() => this.quickSort()}>Quick Sort</button>
                             <button onClick={() => this.heapSort()}>Heap Sort</button>
-                            <button onClick={() => this.bubbleSort()}>Bubble Sort</button>                        
+                            <button onClick={() => this.bubbleSort()}>Bubble Sort</button>
+                            <button onClick={() => this.insertionSort()}>Insertion Sort</button>
+                            <button onClick={() => this.selectionSort()}>Selection Sort</button>
+                            {/* <button onClick={() => this.testSort()}>Test Sort</button> */}
                         </div>
                     </div>
                     {array.map((val, idx) => (
@@ -282,7 +356,8 @@ export class SortingVisualizer extends React.Component {
                             key={idx}
                             style={{
                                     height: `${val}px`,
-                                    width: `${600/this.state.numberOfArrayBars}px`
+                                    // 0.35 to control the width with regards to  the window width
+                                    width: `${0.35*window.innerWidth/this.state.numberOfArrayBars}px`
                                     }}
                         ></div>
                         </div>
@@ -297,14 +372,14 @@ function randIntFromInterVals(min, max) {
     return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-// function arraysEqual(arr1, arr2) {    
-//     if(arr1.length !== arr2.length)
-//         return false;
+function arraysEqual(arr1, arr2) {    
+    if(arr1.length !== arr2.length)
+        return false;
        
-//     for(let i = 0; i < arr1.length; i++) {
-//         if(arr1[i] !== arr2[i])
-//             return false;
-//     }
+    for(let i = 0; i < arr1.length; i++) {
+        if(arr1[i] !== arr2[i])
+            return false;
+    }
 
-//     return true;
-// }
+    return true;
+}
